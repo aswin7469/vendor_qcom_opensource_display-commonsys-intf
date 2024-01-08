@@ -98,16 +98,16 @@ struct private_handle_t {
   uint64_t base;
   uint64_t base_metadata;
   uint64_t gpuaddr;
-#ifndef GRALLOC_HANDLE_HAS_NO_RESERVED_SIZE
+#ifdef GRALLOC_HANDLE_HAS_RESERVED_SIZE
   unsigned int reserved_size;
 #endif
-#ifndef GRALLOC_HANDLE_HAS_NO_CUSTOM_CONTENT_MD_RESERVED_SIZE
+#ifdef GRALLOC_HANDLE_HAS_CUSTOM_CONTENT_MD_RESERVED_SIZE
   unsigned int custom_content_md_reserved_size;
 #endif
 #ifdef __cplusplus
   static const int kNumFds = 2;
   static const int kMagic = 'gmsm';
-#ifndef GRALLOC_HANDLE_HAS_NO_UBWCP
+#ifdef GRALLOC_HANDLE_HAS_UBWCP_FORMAT
   unsigned int linear_size;
   int ubwcp_format;
 #endif
@@ -137,17 +137,17 @@ struct private_handle_t {
         base(0),
         base_metadata(0),
         gpuaddr(0)
-#ifndef GRALLOC_HANDLE_HAS_NO_RESERVED_SIZE
+#ifdef GRALLOC_HANDLE_HAS_RESERVED_SIZE
         ,reserved_size(0)
 #endif
-#ifndef GRALLOC_HANDLE_HAS_NO_UBWCP
-        ,linear_size(0),
-        ubwcp_format(format)
+#ifdef GRALLOC_HANDLE_HAS_UBWCP_FORMAT
+        ,linear_size(0)
+        ,ubwcp_format(format)
 #endif
-#ifndef GRALLOC_HANDLE_HAS_NO_CUSTOM_CONTENT_MD_RESERVED_SIZE
+#ifdef GRALLOC_HANDLE_HAS_CUSTOM_CONTENT_MD_RESERVED_SIZE
         ,custom_content_md_reserved_size(0)
 #endif
-{
+  {
     version = static_cast<int>(sizeof(native_handle));
     numInts = NumInts();
     numFds = kNumFds;
@@ -188,7 +188,7 @@ struct private_handle_t {
   static void Dump(const private_handle_t *hnd) {
     ALOGD("handle id:%" PRIu64
           " wxh:%dx%d uwxuh:%dx%d size: %d fd:%d fd_meta:%d flags:0x%x "
-          "usage:0x%" PRIx64 "  format:0x%x layer_count",
+          "usage:0x%" PRIx64 "  format:0x%x layer_count: %d",
           hnd->id, hnd->width, hnd->height, hnd->unaligned_width, hnd->unaligned_height, hnd->size,
           hnd->fd, hnd->fd_metadata, hnd->flags, hnd->usage, hnd->format, hnd->layer_count);
   }
